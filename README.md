@@ -41,275 +41,74 @@ Unix provides various tools to monitor and tune major system resources like CPU,
 - `top` to view running system tasks and resource usage
 - `ps` to report a snapshot of current processes
 
-# shell scripts4
+# Redirection
 
-### 1. What is the purpose of control statements in shell scripting?
-Control statements are used to **control the flow of execution** in a shell script. Without control statements, execution within a shell script flows from one statement to the next in succession.
+### 1. What is the file descriptor of the Standard Input File?
+The file descriptor **0** is assigned to the standard input file.
 
-### 2. Explain the syntax of a while loop in shell scripting.
-The general syntax of a while loop is:
+### 2. What is the file descriptor of the Standard Error File?
+The file descriptor **2** is assigned to the standard error file.
+
+### 3. What are the three types of redirection in UNIX?
+The three types of redirection in UNIX are:
+- Input redirection (<)
+- Output redirection (>)
+- Error redirection (2>)
+
+### 4. What is the output of the following command: `$ cat file1 > file2`?
+The command `cat file1 > file2` redirects the contents of **file1** to **file2**. If file2 already exists, its contents will be overwritten. If file2 doesn't exist, it will be created.
+
+### 5. What is the output of the following command: `$ cat`?
+The `cat` command without any arguments will wait for input from the **keyboard** (standard input) and display the entered text on the **screen** (standard output).
+
+### 6. What is the output of the following command: `$ cat < newfile`?
+The command `cat < newfile` takes the contents of **newfile** as input and displays it on the screen (standard output).
+
+### 7. What is the output of the following command: `$ cat para3 para4 para5 >> report`?
+The command `cat para3 para4 para5 >> report` appends the contents of files **para3**, **para4**, and **para5** to the end of the file named **report**. If the file report doesn't exist, it will be created.
+
+### 8. What is the output of the following command: `$ date > aaa`?
+The command `date > aaa` redirects the output of the `date` command to a file named **aaa**. If the file aaa already exists, its contents will be overwritten. If aaa doesn't exist, it will be created.
+
+### 9. What is the output of the following command: `$ (date;who;ls) > report`?
+The command `(date;who;ls) > report` executes the commands `date`, `who`, and `ls` sequentially and redirects their combined output to a file named **report**. If the file report already exists, its contents will be overwritten. If report doesn't exist, it will be created.
+
+### 10. What is the output of the following command: `$ cat aaa > bbb 2 > ccc`?
+The command `cat aaa > bbb 2 > ccc` redirects the contents of file **aaa** to file **bbb** and redirects any error messages (file descriptor 2) to file **ccc**. If the files bbb and ccc already exist, their contents will be overwritten. If they don't exist, they will be created.
+
+# UNIX  Environment Variables
+
+### 1. What is an environment variable in Unix?
+An **environment variable** in Unix is a variable that is available to any child process of the shell. It is used to provide information to the programs you use. Environment variables can be either **system-defined** or **user-defined**.
+
+### 2. How can you view and modify shell environment variables?
+Shell environment variables can be viewed and modified using the following syntax:
+- To view the value of a variable: `echo $VARIABLE`
+- To set a new value for a variable: `VARIABLE=value`
+- To remove a variable: `unset VARIABLE`
+
+### 3. What are some common environment variables in Unix?
+Some common environment variables in Unix include:
+- `PATH`: Specifies the directories to search for executable files
+- `HOME`: Specifies the user's home directory
+- `TERM`: Specifies the terminal type
+- `PS1`: Specifies the primary command prompt string
+- `LOGNAME`: Specifies the user's login name
+
+### 4. What is the difference between shell variables and environment variables?
+The main difference is in their scope:
+- **Shell variables** exist only in the shell where they are defined
+- **Environment variables** exist in the current shell and all its child processes
+
+### 5. What is the purpose of the `.profile` file?
+The `.profile` file is a special shell script that is executed when a user logs in. It is used to set environment variables and other standard settings for the system. For example:
 ```
-while condition is true
-do
-  commands
-done
+HOME=/usr/roger
+PATH=:/bin:/usr/bin
+LOGNAME=roger
+PS1="$"
+export HOME PATH LOGNAME PS1
 ```
-- The commands within `do` and `done` get executed as long as the condition is true.
-
-### 3. How can you create an infinite loop using the while construct?
-You can create an infinite loop using the `while true` command. For example:
-```
-while true
-do
-  echo "wish to continue?"
-  read ans
-  if test ${ans}='n'
-  fi 
-done
-```
-
-### 4. What is the purpose of the break and continue commands in shell scripting?
-- The `break` command is used to **terminate a loop** prematurely. When executed, it causes the loop to exit immediately.
-- The `continue` command is used to **resume execution at the top of the loop**. If a certain condition is met within the loop, `continue` allows skipping the remaining portion of the loop and starting from the beginning of the next iteration.
-
-### 5. Explain the syntax of a for loop in shell scripting.
-The syntax of a for loop in shell scripting is:
-```
-for variable in list
-do
-  commands
-done
-```
-- The loop body uses the keywords `do` and `done`. 
-- The `variable` takes on each value from the `list` sequentially, and the commands are executed for each iteration.
-
-### 6. What are positional parameters in shell scripting?
-Positional parameters are used to **pass arguments from the command line to a shell script**. Within the script, the parameters are referred to as arguments. The shell assigns the command name to `$0`, the first argument to `$1`, the second argument to `$2`, and so on, up to `$9`.
-
-### 7. How can you assign values to positional parameters in a shell script?
-To assign values to positional parameters, you can use the `set` command. For example:
-```
-set Friends come and go,but enemies accumulate
-```
-- This command sets the value of `$1` to "Friends", `$2` to "come", and so on.
-- You can verify the assigned values using the `echo` command, such as `echo $1 $2 $3 $4`.
-
-### 8. What is the purpose of the shift command in shell scripting?
-The `shift` command is used to **shift the positional parameters to the left**. It allows accessing more than 9 arguments in a shell script. For example:
-```
-set You have the capacity to learn from mistakes. You will learn a lot in your life
-shift 7
-echo $1 $2 $3 $4 $5 $6 $7 $8 $9
-```
-Output: `mistakes. You will learn a lot in your life`
-
-# shell scripts3
-
-### 1. What are the two main types of decision-making statements in UNIX shell scripting?
-The two main types of decision-making statements in UNIX shell scripting are:
-1. The `if...else` statement
-2. The `case...esac` statement
-
-### 2. What is the general syntax of an `if...else` statement in UNIX shell scripting?
-The general syntax of an `if...else` statement in UNIX shell scripting is:
-```
-if <condition>
-then <commands>
-else <commands>
-fi
-```
-
-### 3. How does the `case...esac` statement work in UNIX shell scripting?
-The `case...esac` statement in UNIX shell scripting works as follows:
-- It matches an expression for more than one alternative
-- It uses a compact construct to permit multiway branching
-- The general syntax is:
-```
-case expression in
-pattern1) commands1 ;;
-pattern2) commands2 ;;
-pattern3) commands3 ;;
-...
-esac
-```
-- It first matches `expression` with `pattern1`. If the match succeeds, it executes `commands1`. If the match fails, it matches with `pattern2` and so on.
-- Each command list is terminated with a pair of semicolons `;;` and the entire construct is closed with `esac`.
-
-### 4. What are the two main types of loops in UNIX shell scripting?
-The two main types of loops in UNIX shell scripting are:
-1. The `while` loop
-2. The `for` loop
-
-### 5. What is the general syntax of a `while` loop in UNIX shell scripting?
-The general syntax of a `while` loop in UNIX shell scripting is:
-```
-while [ condition ]
-do
-  Command1
-  Command2
-  ...
-done
-```
-
-### 6. How does the `for` loop work in UNIX shell scripting?
-The `for` loop in UNIX shell scripting works as follows:
-- It allows the repetition of a command for a specific set of values
-- The general syntax is:
-```
-for var in value1 value2 ...
-do
-  command_set 
-done
-```
-- `command_set` is executed with each value of `var` (`value1`, `value2`, etc.) in sequence
-
-### 7. What are the `break` and `continue` statements used for in loops?
-The `break` and `continue` statements are used in loops as follows:
-- `break`: It is used to exit a loop prematurely, before all iterations are completed
-- `continue`: It is used to skip the remaining statements in the current iteration and move to the next iteration of the loop
-
-# shell scripts2
-
-### 1. What are the basic arithmetic operators supported in shell scripting?
-The basic arithmetic operators supported in shell scripting are:
-- Addition (`+`)
-- Subtraction (`-`) 
-- Multiplication (`*`)
-- Division (`/`)
-- Modulus (`%`)
-
-### 2. How can you perform arithmetic operations in shell scripts?
-There are a few ways to perform arithmetic operations in shell scripts:
-- Using the `expr` command: 
-  ```
-  val=`expr $a + $b`
-  ```
-- Using double parentheses:
-  ```
-  echo "a + b = $((a + b))"
-  ```
-- Using the `let` command:
-  ```
-  let "result = a + b"
-  ```
-
-### 3. What are the relational operators used in shell scripting?
-The relational operators used in shell scripting include:
-- `-eq`: Checks if the values are equal
-- `-ne`: Checks if the values are not equal
-- `-gt`: Checks if the left operand is greater than the right operand
-- `-lt`: Checks if the left operand is less than the right operand
-- `-ge`: Checks if the left operand is greater than or equal to the right operand
-- `-le`: Checks if the left operand is less than or equal to the right operand
-
-### 4. How can you compare strings in shell scripting?
-Strings can be compared using the following operators:
-- `=`: Checks if the strings are equal
-- `!=`: Checks if the strings are not equal
-- `-z`: Checks if the string is empty (zero length)
-- `-n`: Checks if the string is not empty
-
-Example:
-```sh
-if [ "$str1" = "$str2" ]
-then
-  echo "Strings are equal"
-else
-  echo "Strings are not equal"
-fi
-```
-
-### 5. What are the file test operators in shell scripting?
-Some commonly used file test operators in shell scripting are:
-- `-e file`: Checks if the file exists
-- `-f file`: Checks if the file exists and is a regular file
-- `-d file`: Checks if the file exists and is a directory
-- `-r file`: Checks if the file exists and is readable
-- `-w file`: Checks if the file exists and is writable
-- `-x file`: Checks if the file exists and is executable
-- `-s file`: Checks if the file exists and has a size greater than zero
-
-### 6. What is the syntax of the `if-else` statement in shell scripting?
-The basic syntax of the `if-else` statement in shell scripting is:
-```sh
-if [ condition ]
-then
-  # commands to execute if condition is true
-else
-  # commands to execute if condition is false
-fi
-```
-
-You can also use `elif` for multiple conditions:
-```sh
-if [ condition1 ]
-then
-  # commands to execute if condition1 is true
-elif [ condition2 ]
-then
-  # commands to execute if condition2 is true
-else
-  # commands to execute if all conditions are false
-fi
-```
-
-# shell scripts1
-
-### 1. What is a shell script?
-A shell script is a **text file that contains a sequence of Unix commands**. It allows you to execute multiple commands at a single moment of time and automate repetitive tasks.
-
-### 2. How can you execute a shell script?
-To execute a shell script, you can:
-- Make the script executable using `chmod a+x script.sh` and then run it directly: `./script.sh`
-- Use the `sh` command: `sh script.sh`
-
-### 3. What is the purpose of the `echo` command in shell scripting?
-The `echo` command is used to **display messages or values of variables on the screen**. For example:
-```
-echo "Hello, World!"
-name="John"
-echo "My name is $name"
-```
-
-### 4. What are the different types of variables in shell scripting?
-The three main types of variables in shell scripting are:
-- **Local Variables**: Present within the current instance of the shell and not available to programs started by the shell.
-- **Environment Variables**: Available to any child process of the shell. They are set for the current shell and any spawned processes.
-- **Shell Variables**: Special variables used by the shell itself, such as `$HOME`, `$PATH`, `$PS1`, etc.
-
-### 5. How do you define and access variables in shell scripting?
-To define a variable, use the syntax: `variable_name=value`. For example:
-```
-name="John"
-age=25
-```
-
-To access the value of a variable, prefix its name with the `$` symbol. For example:
-```
-echo $name
-echo "My age is $age"
-```
-
-### 6. What is the purpose of the `read` command in shell scripting?
-The `read` command is used to **read user input from the keyboard** and store it in a variable. It allows you to make your shell scripts interactive. For example:
-```
-echo "Enter your name: "
-read name
-echo "Hello, $name!"
-```
-
-### 7. How do you perform arithmetic operations in shell scripting?
-In shell scripting, you can use the `expr` command to perform arithmetic operations. For example:
-```
-a=10
-b=5
-sum=`expr $a + $b`
-echo "The sum is: $sum"
-```
-
-Note that there should be spaces around the arithmetic operators when using `expr`.
-
-These questions cover some of the key concepts mentioned in your notes, such as shell scripting basics, variables, the `echo` and `read` commands, and arithmetic operations using `expr`.
 
 # UNIX COMMANDSNEW
 
@@ -389,36 +188,58 @@ This command will concatenate the contents of "file1.txt" and "file2.txt" and re
   ```
 You can also specify the number of lines to display using the `-n` option. For example, `head -n 5 filename.txt` will display the first 5 lines of the file.
 
-# UNIX3 
+# UNIX Process
 
-### 1. What is a file in UNIX?
-In UNIX, **everything is considered as a file**, including physical devices such as DVD ROMs, USB devices, floppy drives, input/output devices, programs, services, text, images, etc. If something is not a file, it is a process.
+### 1. What is the difference between a process and a program in Unix?
+A **program is a passive entity**, such as contents of a file stored on disk, whereas a **process is an active entity with a program counter specifying the next instruction to execute and a set of associated resources**. A program is elevated to the status of a process when it starts executing.
 
-### 2. What is the difference between a directory and a file in UNIX?
-Some key differences between directories and files in UNIX are:
-- A directory can contain other files and sub-directories, while a file cannot contain a directory
-- A directory is also considered a special type of file that contains names of other files
-- Files contain the actual data/information, while directories are used to organize files in a hierarchical structure
+### 2. What are the different states a process can be in?
+A process in Unix can be in the following states:
+- NEW: The process is being created
+- RUNNING: Instructions are being executed
+- WAITING: The process is waiting for some event to occur (such as I/O completion or reception of a signal)
+- READY: The process is waiting to be assigned to a processor
+- TERMINATED: The process has finished execution
 
-### 3. What is the root directory in UNIX and how is it represented?
-The root directory is the top-most directory in the UNIX file system hierarchy. **No directory exists above the root directory**. It serves as the reference/starting point for all files, directories and sub-directories. The root directory is represented by a forward slash (`/`) symbol.
+### 3. How are processes created in Unix?
+The only way for a user to create a new process in Unix is to invoke the `fork` system call. The process that invokes `fork` is called the **parent process**, and the newly created process is called the **child process**. The `fork` system call creates an exact copy of the parent process.
 
-### 4. What are the different types of files in UNIX?
-The main types of files in UNIX are:
-1. Ordinary/Regular Files - used to store user data, programs, text, etc. Users can modify these files.
-2. Directory Files - contain information about files and sub-directories within them. Modified automatically by the system.
-3. Device/Special Files - represent physical devices like printers, terminals. Found in `/dev` directory. Cannot be altered by users.
+### 4. What are zombie and orphan processes?
+- **Orphan Process**: When a parent process is killed before its child process, the child process becomes an orphan. The `init` process becomes the new parent (PPID) of the orphan process.
+- **Zombie Process**: When a child process is killed, the parent process is updated via a SIGCHLD signal. If the parent process does not handle this signal and clean up the child process, the child process becomes a zombie process, which continues to exist in the process table even after termination.
 
-### 5. How are file permissions represented and modified in UNIX?
-File permissions in UNIX are represented in the following format: `rwxrwxrwx`
-- `r` is for read, `w` is for write, `x` is for execute 
-- The first triplet is for user, second for group, third for others
-- Permissions can be modified using the `chmod` command in either symbolic or absolute/octal mode
-For example: 
-```
-chmod u=rwx,g=rx,o=r myfile
-chmod 754 myfile
-```
+### 5. How can you manage processes using job control in Unix?
+The Unix shell provides job control commands to manage processes:
+- `&`: Runs a command in the background
+- `ctrl-z`: Suspends the current foreground process
+- `bg`: Resumes a suspended process and runs it in the background
+- `fg`: Brings a background process to the foreground
+- `jobs`: Lists the current jobs (processes)
+- `kill %<job-id>`: Terminates a specific job based on its job ID
+
+# UNIX1 (1)
+
+### 1. What is the primary goal of an operating system?
+The **primary goal of an operating system is to make the computer system convenient to use** for the user. The secondary goal is to use the computer hardware efficiently.
+
+### 2. What are the three broad categories of activities that an operating system is responsible for?
+An operating system is responsible for:
+- **Essential Functions**: Ensures optimum and effective utilization of resources
+- **Monitoring Functions**: Monitors and collects information related to system performance
+- **Service Functions**: Provides services to users
+
+### 3. What is the difference between a single-user and multi-user operating system?
+- A **single-user operating system**, like DOS, is designed for use by one person at a time on a personal computer.
+- A **multi-user operating system** allows more than one user to access the system simultaneously. It is required when multiple programs need to run concurrently or when resources like printers and disks need to be shared by multiple users.
+
+### 4. What are the two types of user interfaces available in Unix operating systems?
+Unix operating systems provide two types of user interfaces:
+1. **Command User Interface (CUI)**: A simple command-line shell where commands are typed in and executed. Examples include MS-DOS and traditional Unix shells.
+2. **Graphical User Interface (GUI)**: A graphical interface similar to Microsoft Windows, called X Window or simply X, is available on modern Unix systems like Linux.
+
+### 5. What is the role of the command interpreter in an operating system?
+The command interpreter, also known as the command processor or command line interpreter, is a user interface to the file system, process management system, and protection system. Its role is to:
+`Translate the commands keyed in by the user into a language that the CPU can understand, since the CPU cannot directly understand user commands.`
 
 # UNIX2 (1)
 
@@ -453,29 +274,36 @@ Some of the common types of shells in UNIX include:
 - **Korn Shell (ksh)**: Developed by David Korn, combining features of Bourne and C shells
 - **Restricted Shell (rsh)**: A restricted version of the Bourne shell, used for guest logins with limited permissions
 
-# UNIX1 (1)
+# UNIX3 
 
-### 1. What is the primary goal of an operating system?
-The **primary goal of an operating system is to make the computer system convenient to use** for the user. The secondary goal is to use the computer hardware efficiently.
+### 1. What is a file in UNIX?
+In UNIX, **everything is considered as a file**, including physical devices such as DVD ROMs, USB devices, floppy drives, input/output devices, programs, services, text, images, etc. If something is not a file, it is a process.
 
-### 2. What are the three broad categories of activities that an operating system is responsible for?
-An operating system is responsible for:
-- **Essential Functions**: Ensures optimum and effective utilization of resources
-- **Monitoring Functions**: Monitors and collects information related to system performance
-- **Service Functions**: Provides services to users
+### 2. What is the difference between a directory and a file in UNIX?
+Some key differences between directories and files in UNIX are:
+- A directory can contain other files and sub-directories, while a file cannot contain a directory
+- A directory is also considered a special type of file that contains names of other files
+- Files contain the actual data/information, while directories are used to organize files in a hierarchical structure
 
-### 3. What is the difference between a single-user and multi-user operating system?
-- A **single-user operating system**, like DOS, is designed for use by one person at a time on a personal computer.
-- A **multi-user operating system** allows more than one user to access the system simultaneously. It is required when multiple programs need to run concurrently or when resources like printers and disks need to be shared by multiple users.
+### 3. What is the root directory in UNIX and how is it represented?
+The root directory is the top-most directory in the UNIX file system hierarchy. **No directory exists above the root directory**. It serves as the reference/starting point for all files, directories and sub-directories. The root directory is represented by a forward slash (`/`) symbol.
 
-### 4. What are the two types of user interfaces available in Unix operating systems?
-Unix operating systems provide two types of user interfaces:
-1. **Command User Interface (CUI)**: A simple command-line shell where commands are typed in and executed. Examples include MS-DOS and traditional Unix shells.
-2. **Graphical User Interface (GUI)**: A graphical interface similar to Microsoft Windows, called X Window or simply X, is available on modern Unix systems like Linux.
+### 4. What are the different types of files in UNIX?
+The main types of files in UNIX are:
+1. Ordinary/Regular Files - used to store user data, programs, text, etc. Users can modify these files.
+2. Directory Files - contain information about files and sub-directories within them. Modified automatically by the system.
+3. Device/Special Files - represent physical devices like printers, terminals. Found in `/dev` directory. Cannot be altered by users.
 
-### 5. What is the role of the command interpreter in an operating system?
-The command interpreter, also known as the command processor or command line interpreter, is a user interface to the file system, process management system, and protection system. Its role is to:
-`Translate the commands keyed in by the user into a language that the CPU can understand, since the CPU cannot directly understand user commands.`
+### 5. How are file permissions represented and modified in UNIX?
+File permissions in UNIX are represented in the following format: `rwxrwxrwx`
+- `r` is for read, `w` is for write, `x` is for execute 
+- The first triplet is for user, second for group, third for others
+- Permissions can be modified using the `chmod` command in either symbolic or absolute/octal mode
+For example: 
+```
+chmod u=rwx,g=rx,o=r myfile
+chmod 754 myfile
+```
 
 # UNIX5INODE
 
@@ -515,41 +343,6 @@ $ - matches the end of the line
 [^abc] - matches any character not included within the square brackets
 [a-e] - matches any character within the specified range (a, b, c, d, or e)
 ```
-
-# Redirection
-
-### 1. What is the file descriptor of the Standard Input File?
-The file descriptor **0** is assigned to the standard input file.
-
-### 2. What is the file descriptor of the Standard Error File?
-The file descriptor **2** is assigned to the standard error file.
-
-### 3. What are the three types of redirection in UNIX?
-The three types of redirection in UNIX are:
-- Input redirection (<)
-- Output redirection (>)
-- Error redirection (2>)
-
-### 4. What is the output of the following command: `$ cat file1 > file2`?
-The command `cat file1 > file2` redirects the contents of **file1** to **file2**. If file2 already exists, its contents will be overwritten. If file2 doesn't exist, it will be created.
-
-### 5. What is the output of the following command: `$ cat`?
-The `cat` command without any arguments will wait for input from the **keyboard** (standard input) and display the entered text on the **screen** (standard output).
-
-### 6. What is the output of the following command: `$ cat < newfile`?
-The command `cat < newfile` takes the contents of **newfile** as input and displays it on the screen (standard output).
-
-### 7. What is the output of the following command: `$ cat para3 para4 para5 >> report`?
-The command `cat para3 para4 para5 >> report` appends the contents of files **para3**, **para4**, and **para5** to the end of the file named **report**. If the file report doesn't exist, it will be created.
-
-### 8. What is the output of the following command: `$ date > aaa`?
-The command `date > aaa` redirects the output of the `date` command to a file named **aaa**. If the file aaa already exists, its contents will be overwritten. If aaa doesn't exist, it will be created.
-
-### 9. What is the output of the following command: `$ (date;who;ls) > report`?
-The command `(date;who;ls) > report` executes the commands `date`, `who`, and `ls` sequentially and redirects their combined output to a file named **report**. If the file report already exists, its contents will be overwritten. If report doesn't exist, it will be created.
-
-### 10. What is the output of the following command: `$ cat aaa > bbb 2 > ccc`?
-The command `cat aaa > bbb 2 > ccc` redirects the contents of file **aaa** to file **bbb** and redirects any error messages (file descriptor 2) to file **ccc**. If the files bbb and ccc already exist, their contents will be overwritten. If they don't exist, they will be created.
 
 # UNIX7Filters
 
@@ -643,66 +436,6 @@ To save changes and exit vi, use the following commands:
 To quit vi without saving changes, use:
 - `:q!` - quit and discard any changes
 
-# UNIX Process
+# all seperate.
 
-### 1. What is the difference between a process and a program in Unix?
-A **program is a passive entity**, such as contents of a file stored on disk, whereas a **process is an active entity with a program counter specifying the next instruction to execute and a set of associated resources**. A program is elevated to the status of a process when it starts executing.
-
-### 2. What are the different states a process can be in?
-A process in Unix can be in the following states:
-- NEW: The process is being created
-- RUNNING: Instructions are being executed
-- WAITING: The process is waiting for some event to occur (such as I/O completion or reception of a signal)
-- READY: The process is waiting to be assigned to a processor
-- TERMINATED: The process has finished execution
-
-### 3. How are processes created in Unix?
-The only way for a user to create a new process in Unix is to invoke the `fork` system call. The process that invokes `fork` is called the **parent process**, and the newly created process is called the **child process**. The `fork` system call creates an exact copy of the parent process.
-
-### 4. What are zombie and orphan processes?
-- **Orphan Process**: When a parent process is killed before its child process, the child process becomes an orphan. The `init` process becomes the new parent (PPID) of the orphan process.
-- **Zombie Process**: When a child process is killed, the parent process is updated via a SIGCHLD signal. If the parent process does not handle this signal and clean up the child process, the child process becomes a zombie process, which continues to exist in the process table even after termination.
-
-### 5. How can you manage processes using job control in Unix?
-The Unix shell provides job control commands to manage processes:
-- `&`: Runs a command in the background
-- `ctrl-z`: Suspends the current foreground process
-- `bg`: Resumes a suspended process and runs it in the background
-- `fg`: Brings a background process to the foreground
-- `jobs`: Lists the current jobs (processes)
-- `kill %<job-id>`: Terminates a specific job based on its job ID
-
-# UNIX  Environment Variables
-
-### 1. What is an environment variable in Unix?
-An **environment variable** in Unix is a variable that is available to any child process of the shell. It is used to provide information to the programs you use. Environment variables can be either **system-defined** or **user-defined**.
-
-### 2. How can you view and modify shell environment variables?
-Shell environment variables can be viewed and modified using the following syntax:
-- To view the value of a variable: `echo $VARIABLE`
-- To set a new value for a variable: `VARIABLE=value`
-- To remove a variable: `unset VARIABLE`
-
-### 3. What are some common environment variables in Unix?
-Some common environment variables in Unix include:
-- `PATH`: Specifies the directories to search for executable files
-- `HOME`: Specifies the user's home directory
-- `TERM`: Specifies the terminal type
-- `PS1`: Specifies the primary command prompt string
-- `LOGNAME`: Specifies the user's login name
-
-### 4. What is the difference between shell variables and environment variables?
-The main difference is in their scope:
-- **Shell variables** exist only in the shell where they are defined
-- **Environment variables** exist in the current shell and all its child processes
-
-### 5. What is the purpose of the `.profile` file?
-The `.profile` file is a special shell script that is executed when a user logs in. It is used to set environment variables and other standard settings for the system. For example:
-```
-HOME=/usr/roger
-PATH=:/bin:/usr/bin
-LOGNAME=roger
-PS1="$"
-export HOME PATH LOGNAME PS1
-```
-
+PK
